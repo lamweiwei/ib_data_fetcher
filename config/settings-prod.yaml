@@ -1,0 +1,55 @@
+# Production Environment Configuration for IB Data Fetcher
+# Optimized for production reliability and monitoring
+
+# IB TWS Connection Settings
+connection:
+  host: "127.0.0.1"
+  port: 4001  # IB Gateway port (more stable for production)
+  client_id: 1
+  account_type: "live"  # Live trading account for production
+  timeout: 60  # Longer timeout for production stability
+  reconnection_attempts: 5  # More attempts for production reliability
+
+rate_limit:
+  requests_per_second: 0.1  # Conservative rate limiting
+  max_requests_per_10min: 50  # Slightly under limit for safety
+
+retry:
+  max_attempts: 3  # Standard retries for production
+  wait_seconds: 15  # Longer wait to avoid overwhelming system
+
+# Data fetching strategy
+data_fetching:
+  direction: "newest_to_oldest"
+  use_head_timestamp: true
+  max_history_days: null  # Fetch all available data in production
+
+validation:
+  expected_bars:
+    regular_day: 390
+    early_close: [360, 210]
+    holiday: 0
+
+logging:
+  level: INFO  # Balanced logging for production
+  daily_rotation: true
+  max_size_mb: 50  # Larger log files for production
+  backup_count: 30  # Keep 30 days of logs
+  console_output: false  # No console output in production
+
+# Development and Testing
+development:
+  test_each_feature: false  # No testing features in production
+  environment: "prod"
+  mock_api_for_tests: false  # Never use mocks in production
+  debug_mode: false
+  verbose_errors: false  # Don't expose verbose errors in production
+  skip_data_validation: false  # Always validate data in production
+
+# Production-specific settings
+production:
+  monitoring_enabled: true
+  alert_on_errors: true
+  performance_metrics: true
+  data_integrity_checks: true
+  backup_enabled: true 

@@ -1,0 +1,47 @@
+# Development Environment Configuration for IB Data Fetcher
+# Optimized for development with verbose logging and shorter waits
+
+# IB TWS Connection Settings
+connection:
+  host: "127.0.0.1"
+  port: 7497  # TWS paper trading port
+  client_id: 1
+  account_type: "paper"  # Paper trading account
+  timeout: 15  # Shorter timeout for dev - fail fast
+  reconnection_attempts: 2  # Fewer attempts for faster feedback
+
+rate_limit:
+  requests_per_second: 0.1  # 1 request per 10 seconds
+  max_requests_per_10min: 60
+
+retry:
+  max_attempts: 2  # Fewer retries in dev
+  wait_seconds: 5  # Shorter wait for faster feedback
+
+# Data fetching strategy
+data_fetching:
+  direction: "newest_to_oldest"
+  use_head_timestamp: true
+  max_history_days: 5  # Limit history for faster testing
+
+validation:
+  expected_bars:
+    regular_day: 390
+    early_close: [360, 210]
+    holiday: 0
+
+logging:
+  level: DEBUG  # More verbose logging for development
+  daily_rotation: true
+  max_size_mb: 5  # Smaller log files for dev
+  backup_count: 3
+  console_output: true  # Show logs in console for dev
+
+# Development and Testing
+development:
+  test_each_feature: true
+  environment: "dev"
+  mock_api_for_tests: true
+  debug_mode: true
+  verbose_errors: true
+  skip_data_validation: false  # Keep validation in dev for testing 

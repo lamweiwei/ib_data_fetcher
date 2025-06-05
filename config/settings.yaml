@@ -1,0 +1,44 @@
+# IB TWS Connection Settings
+connection:
+  host: "127.0.0.1"
+  port: 7497  # TWS paper trading port
+  client_id: 1
+  account_type: "paper"  # Paper trading account
+  timeout: 30  # Connection timeout in seconds
+
+rate_limit:
+  requests_per_second: 0.1  # 1 request per 10 seconds
+  max_requests_per_10min: 60
+
+retry:
+  max_attempts: 3
+  wait_seconds: 10
+
+# Consecutive failure handling
+failure_handling:
+  max_consecutive_failures: 10  # Skip symbol after this many consecutive failures
+  reset_on_success: true        # Reset consecutive failure count on any success
+
+# Data fetching strategy
+data_fetching:
+  direction: "newest_to_oldest"  # Fetch from newest to oldest data
+  use_head_timestamp: true      # Use reqHeadTimeStamp to find earliest available data
+  max_history_days: null        # Fetch maximum available data (no limit)
+
+validation:
+  expected_bars:
+    regular_day: 390
+    early_close: [360, 210]
+    holiday: 0
+
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  daily_rotation: true
+  max_size_mb: 10
+  backup_count: 5
+
+# Development and Testing
+development:
+  test_each_feature: true       # Test each feature when implemented
+  environment: "dev"            # dev, test, prod
+  mock_api_for_tests: true      # Use mocked IB API for unit tests 

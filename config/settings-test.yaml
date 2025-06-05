@@ -1,0 +1,47 @@
+# Test Environment Configuration for IB Data Fetcher
+# Optimized for automated testing with mocks and minimal resources
+
+# IB TWS Connection Settings
+connection:
+  host: "127.0.0.1"
+  port: 7497  # Still use standard port
+  client_id: 999  # Different client ID to avoid conflicts
+  account_type: "paper"
+  timeout: 10  # Very short timeout for tests
+  reconnection_attempts: 1  # Minimal reconnection for fast test failures
+
+rate_limit:
+  requests_per_second: 0.5  # Faster rate for tests (every 2 seconds)
+  max_requests_per_10min: 60
+
+retry:
+  max_attempts: 1  # No retries in tests for predictable behavior
+  wait_seconds: 1  # Minimal wait time
+
+# Data fetching strategy
+data_fetching:
+  direction: "newest_to_oldest"
+  use_head_timestamp: true
+  max_history_days: 1  # Minimal data for tests
+
+validation:
+  expected_bars:
+    regular_day: 390
+    early_close: [360, 210]
+    holiday: 0
+
+logging:
+  level: WARNING  # Minimal logging for tests
+  daily_rotation: false
+  max_size_mb: 1  # Very small log files
+  backup_count: 1
+  console_output: false  # No console spam during tests
+
+# Development and Testing
+development:
+  test_each_feature: true
+  environment: "test"
+  mock_api_for_tests: true  # Always use mocks in test environment
+  debug_mode: false
+  verbose_errors: false
+  skip_data_validation: false  # Keep validation for test coverage 
