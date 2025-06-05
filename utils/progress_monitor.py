@@ -11,6 +11,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from utils.logging import get_logger
+from utils.eta_calculator import format_duration
 
 if TYPE_CHECKING:
     from core.fetcher_job import AsyncDataFetcherJob
@@ -79,7 +80,7 @@ class ProgressMonitor:
                         symbol_eta_result = job_manager.eta_calculator.get_symbol_eta(progress.symbol)
                         if symbol_eta_result:
                             symbol_eta, completion_pct = symbol_eta_result
-                            eta_info = f" | Symbol ETA: {str(symbol_eta).split('.')[0]}"
+                            eta_info = f" | Symbol ETA: {format_duration(symbol_eta)}"
                     
                     self.logger.info(
                         "Progress for %s: %d/%d dates (%.1f%% complete, %.1f%% success rate) - Current: %s%s",

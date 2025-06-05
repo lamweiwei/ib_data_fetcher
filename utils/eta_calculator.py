@@ -14,6 +14,29 @@ from pathlib import Path
 from utils.logging import get_logger
 
 
+def format_duration(td: timedelta) -> str:
+    """
+    Format a timedelta to show only hours, minutes, and seconds (no days).
+    
+    Args:
+        td: Timedelta to format
+        
+    Returns:
+        Formatted string in HH:MM:SS format
+    """
+    if td is None:
+        return "0:00:00"
+    
+    total_seconds = int(td.total_seconds())
+    if total_seconds < 0:
+        return "0:00:00"
+    
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    
+    return f"{hours}:{minutes:02d}:{seconds:02d}"
+
+
 @dataclass
 class SymbolTiming:
     """Timing data for a symbol."""
@@ -200,11 +223,11 @@ class ETACalculator:
             'completed_symbols': completed_count,
             'remaining_symbols': remaining_symbols,
             'completion_percentage': completion_percentage,
-            'elapsed_time': str(elapsed_time).split('.')[0],  # Remove microseconds
-            'estimated_remaining_time': str(timedelta(seconds=remaining_time_seconds)).split('.')[0],
+            'elapsed_time': format_duration(elapsed_time),
+            'estimated_remaining_time': format_duration(timedelta(seconds=remaining_time_seconds)),
             'estimated_completion': estimated_completion.strftime('%Y-%m-%d %H:%M:%S UTC'),
             'avg_time_per_symbol': f"{avg_time_per_symbol/60:.1f} minutes",
-            'current_symbol_eta': str(current_symbol_eta).split('.')[0]
+            'current_symbol_eta': format_duration(current_symbol_eta)
         }
     
     def get_performance_summary(self) -> Dict:

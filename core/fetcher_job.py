@@ -41,7 +41,7 @@ from utils.config_manager import get_config_manager
 from utils.bar_status_manager import BarStatusManager, BarStatus, BarStatusRecord
 from utils.symbol_manager import SymbolManager
 from utils.date_processor import DateProcessor
-from utils.eta_calculator import ETACalculator
+from utils.eta_calculator import ETACalculator, format_duration
 from utils.smart_retry_manager import SmartRetryManager, FailureType
 
 
@@ -432,7 +432,7 @@ class DataFetcherJob:
                         "✅ %s for %s (%d/%d - %.1f%%) | Symbol ETA: %s",
                         date.strftime('%Y-%m-%d'), symbol,
                         self.current_job.completed_dates, self.current_job.total_dates,
-                        completion_pct, str(symbol_eta).split('.')[0]
+                        completion_pct, format_duration(symbol_eta)
                     )
                 else:
                     self.current_job.error_dates += 1
@@ -541,7 +541,7 @@ class DataFetcherJob:
         if eta_result:
             symbol_eta, completion_pct = eta_result
             eta_info = {
-                'estimated_remaining_time': str(symbol_eta).split('.')[0],
+                'estimated_remaining_time': format_duration(symbol_eta),
                 'eta_completion_percentage': completion_pct
             }
         
